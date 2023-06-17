@@ -5,9 +5,9 @@ module.exports.getUsers = (req, res) => {
     .then((users) => res.send({ data: users }))
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        res.status(400).res.send({ message: err.message });
+        res.status(400).send({ message: err.message });
       } else {
-        res.status(404).res.send({ message: err.message });
+        res.status(404).send({ message: err.message });
       }
     });
 };
@@ -17,9 +17,9 @@ module.exports.getUser = (req, res) => {
     .then((user) => res.send({ data: user }))
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        res.status(400).res.send({ message: err.message });
+        res.status(400).send({ message: err.message });
       } else {
-        res.status(404).res.send({ message: err.message });
+        res.status(404).send({ message: err.message });
       }
     });
 };
@@ -29,7 +29,13 @@ module.exports.createUser = (req, res) => {
 
   User.create({ name, about, avatar })
     .then((user) => res.send({ data: user }))
-    .catch(() => res.status(500).send({ message: 'Произошла ошибка' }));
+    .catch((err) => {
+      if (err.name === 'ValidationError') {
+        res.status(400).send({ message: err.message });
+      } else {
+        res.status(404).send({ message: err.message });
+      }
+    });
 };
 
 module.exports.editUserInfo = (req, res) => {
@@ -39,9 +45,9 @@ module.exports.editUserInfo = (req, res) => {
     .then((user) => res.send({ data: user }))
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        res.status(400).res.send({ message: err.message });
+        res.status(400).send({ message: err.message });
       } else {
-        res.status(404).res.send({ message: err.message });
+        res.status(404).send({ message: err.message });
       }
     });
 };
@@ -53,9 +59,9 @@ module.exports.editUserAvatar = (req, res) => {
     .then((user) => res.send({ data: user }))
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        res.status(400).res.send({ message: err.message });
+        res.status(400).send({ message: err.message });
       } else {
-        res.status(404).res.send({ message: err.message });
+        res.status(404).send({ message: err.message });
       }
     });
 };

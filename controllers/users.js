@@ -9,7 +9,7 @@ module.exports.getUsers = (req, res) => {
 module.exports.getUser = (req, res) => {
   User.findById(req.params.id)
     .then((user) => res.send({ data: user }))
-    .catch((err) => res.status(500).send({ message: err.message }));
+    .catch((err) => res.send({ message: err.name }));
 };
 
 module.exports.createUser = (req, res) => {
@@ -17,7 +17,7 @@ module.exports.createUser = (req, res) => {
 
   User.create({ name, about, avatar })
     .then((user) => res.send({ data: user }))
-    .catch((err) => res.status(500).send({ message: err.message }));
+    .catch((err) => res.send({ message: err.name }));
 };
 
 module.exports.editUserInfo = (req, res) => {
@@ -25,7 +25,7 @@ module.exports.editUserInfo = (req, res) => {
 
   User.findByIdAndUpdate(req.user._id, { name, about })
     .then((user) => res.send({ data: user }))
-    .catch((err) => res.status(500).send({ message: err.message }));
+    .catch((err) => res.send({ message: err.name }));
 };
 
 module.exports.editUserAvatar = (req, res) => {
@@ -33,5 +33,5 @@ module.exports.editUserAvatar = (req, res) => {
 
   User.findByIdAndUpdate(req.user._id, { avatar })
     .then((user) => res.send({ data: user }))
-    .catch((err) => res.status(500).send({ message: err.message }));
+    .catch((err) => res.send({ message: err.name }));
 };

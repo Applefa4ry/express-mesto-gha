@@ -28,6 +28,5 @@ app.use('/cards', require('./routes/cards'));
 app.use('/', express.Router().all('/:some', (req, res) => {
   res.status(404).send({ message: 'Страница не найдена' });
 }));
-app.listen(PORT, () => {
-  console.log(`App listening on port ${PORT}`);
-});
+
+app.listen(PORT);

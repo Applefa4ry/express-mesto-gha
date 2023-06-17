@@ -29,13 +29,7 @@ module.exports.createUser = (req, res) => {
 
   User.create({ name, about, avatar })
     .then((user) => res.send({ data: user }))
-    .catch((err) => {
-      if (err.name === 'ValidationError') {
-        res.status(400).res.send({ message: err.message });
-      } else {
-        res.status(404).res.send({ message: err.message });
-      }
-    });
+    .catch(() => res.status(500).send({ message: 'Произошла ошибка' }));
 };
 
 module.exports.editUserInfo = (req, res) => {

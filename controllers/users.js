@@ -6,9 +6,9 @@ module.exports.getUsers = (req, res) => {
     .catch((err) => {
       if (err.name === 'ValidationError') {
         res.status(400).res.send({ message: err.message });
-        return;
+      } else {
+        res.status(400).res.send({ message: err.message });
       }
-      res.status(400).res.send({ message: err.message });
     });
 };
 
@@ -18,9 +18,9 @@ module.exports.getUser = (req, res) => {
     .catch((err) => {
       if (err.name === 'ValidationError') {
         res.status(400).res.send({ message: err.message });
-        return;
+      } else {
+        res.status(400).res.send({ message: err.message });
       }
-      res.status(400).res.send({ message: err.message });
     });
 };
 
@@ -32,9 +32,9 @@ module.exports.createUser = (req, res) => {
     .catch((err) => {
       if (err.name === 'ValidationError') {
         res.status(400).res.send({ message: err.message });
-        return;
+      } else {
+        res.status(400).res.send({ message: err.message });
       }
-      res.status(400).res.send({ message: err.message });
     });
 };
 
@@ -46,9 +46,9 @@ module.exports.editUserInfo = (req, res) => {
     .catch((err) => {
       if (err.name === 'ValidationError') {
         res.status(400).res.send({ message: err.message });
-        return;
+      } else {
+        res.status(400).res.send({ message: err.message });
       }
-      res.status(400).res.send({ message: err.message });
     });
 };
 
@@ -60,8 +60,8 @@ module.exports.editUserAvatar = (req, res) => {
     .catch((err) => {
       if (err.name === 'ValidationError') {
         res.status(400).res.send({ message: err.message });
-        return;
+      } else {
+        res.status(400).res.send({ message: err.message });
       }
-      res.status(400).res.send({ message: err.message });
     });
 };

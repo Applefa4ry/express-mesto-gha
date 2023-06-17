@@ -6,9 +6,9 @@ module.exports.getCards = (req, res) => {
     .catch((err) => {
       if (err.name === 'ValidationError') {
         res.status(400).res.send({ message: err.message });
-        return;
+      } else {
+        res.status(400).res.send({ message: err.message });
       }
-      res.status(400).res.send({ message: err.message });
     });
 };
 
@@ -20,9 +20,9 @@ module.exports.createCard = (req, res) => {
     .catch((err) => {
       if (err.name === 'ValidationError') {
         res.status(400).res.send({ message: err.message });
-        return;
+      } else {
+        res.status(400).res.send({ message: err.message });
       }
-      res.status(400).res.send({ message: err.message });
     });
 };
 
@@ -32,9 +32,9 @@ module.exports.deleteCard = (req, res) => {
     .catch((err) => {
       if (err.name === 'ValidationError') {
         res.status(400).res.send({ message: err.message });
-        return;
+      } else {
+        res.status(400).res.send({ message: err.message });
       }
-      res.status(400).res.send({ message: err.message });
     });
 };
 
@@ -48,9 +48,9 @@ module.exports.likeCard = (req, res) => {
     .catch((err) => {
       if (err.name === 'ValidationError') {
         res.status(400).res.send({ message: err.message });
-        return;
+      } else {
+        res.status(400).res.send({ message: err.message });
       }
-      res.status(400).res.send({ message: err.message });
     });
 };
 
@@ -64,8 +64,8 @@ module.exports.dislikeCard = (req, res) => {
     .catch((err) => {
       if (err.name === 'ValidationError') {
         res.status(400).res.send({ message: err.message });
-        return;
+      } else {
+        res.status(400).res.send({ message: err.message });
       }
-      res.status(400).res.send({ message: err.message });
     });
 };

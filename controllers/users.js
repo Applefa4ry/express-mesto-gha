@@ -7,7 +7,7 @@ module.exports.getUsers = (req, res) => {
       if (err.name === 'ValidationError' || err.name === 'CastError') {
         res.status(400).send({ message: err.message });
       } else {
-        res.status(404).send({ message: err.message });
+        res.status(404).send({ message: err.name });
       }
     });
 };
@@ -36,7 +36,7 @@ module.exports.createUser = (req, res) => {
       if (err.name === 'ValidationError' || err.name === 'CastError') {
         res.status(400).send({ message: err.message });
       } else {
-        res.status(404).send({ message: err.message });
+        res.status(404).send({ message: err.name });
       }
     });
 };
@@ -54,7 +54,7 @@ module.exports.editUserInfo = (req, res) => {
       if (err.name === 'ValidationError' || err.name === 'CastError') {
         res.status(400).send({ message: err.message });
       } else {
-        res.status(404).send({ message: err.message });
+        res.status(404).send({ message: err.name });
       }
     });
 };
@@ -72,7 +72,7 @@ module.exports.editUserAvatar = (req, res) => {
       if (err.name === 'ValidationError' || err.name === 'CastError') {
         res.status(400).send({ message: err.message });
       } else {
-        res.status(404).send({ message: err.message });
+        res.status(404).send({ message: err.name });
       }
     });
 };

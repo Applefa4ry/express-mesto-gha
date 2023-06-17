@@ -14,6 +14,7 @@ module.exports.getUsers = (req, res) => {
 
 module.exports.getUser = (req, res) => {
   User.findById(req.params.userId, {
+    new: true,
     runValidators: true, // данные будут валидированы перед изменением
     upsert: false,
   })

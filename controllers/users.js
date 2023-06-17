@@ -4,7 +4,7 @@ module.exports.getUsers = (req, res) => {
   User.find({})
     .then((users) => res.send({ data: users }))
     .catch((err) => {
-      if (err.name === 'ValidationError') {
+      if (err.name === 'ValidationError' || err.name === 'CastError') {
         res.status(400).send({ message: err.message });
       } else {
         res.status(404).send({ message: err.message });
@@ -13,10 +13,13 @@ module.exports.getUsers = (req, res) => {
 };
 
 module.exports.getUser = (req, res) => {
-  User.findById(req.params.userId)
+  User.findById(req.params.userId, {
+    runValidators: true, // данные будут валидированы перед изменением
+    upsert: false,
+  })
     .then((user) => res.send({ data: user }))
     .catch((err) => {
-      if (err.name === 'ValidationError') {
+      if (err.name === 'ValidationError' || err.name === 'CastError') {
         res.status(400).send({ message: err.message });
       } else {
         res.status(404).send({ message: err.name });
@@ -30,7 +33,7 @@ module.exports.createUser = (req, res) => {
   User.create({ name, about, avatar })
     .then((user) => res.send({ data: user }))
     .catch((err) => {
-      if (err.name === 'ValidationError') {
+      if (err.name === 'ValidationError' || err.name === 'CastError') {
         res.status(400).send({ message: err.message });
       } else {
         res.status(404).send({ message: err.message });
@@ -48,7 +51,7 @@ module.exports.editUserInfo = (req, res) => {
   })
     .then((user) => res.send({ data: user }))
     .catch((err) => {
-      if (err.name === 'ValidationError') {
+      if (err.name === 'ValidationError' || err.name === 'CastError') {
         res.status(400).send({ message: err.message });
       } else {
         res.status(404).send({ message: err.message });
@@ -66,7 +69,7 @@ module.exports.editUserAvatar = (req, res) => {
   })
     .then((user) => res.send({ data: user }))
     .catch((err) => {
-      if (err.name === 'ValidationError') {
+      if (err.name === 'ValidationError' || err.name === 'CastError') {
         res.status(400).send({ message: err.message });
       } else {
         res.status(404).send({ message: err.message });

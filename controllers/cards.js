@@ -51,7 +51,13 @@ module.exports.likeCard = (req, res) => {
       upsert: false, // если пользователь не найден, он будет создан
     },
   )
-    .then((card) => res.send({ data: card }))
+    .then((card) => {
+      if (!card) {
+        res.status(404).send({ message: 'Такой карточки не существует' });
+      } else {
+        res.send({ data: card });
+      }
+    })
     .catch((err) => {
       if (err.name === 'ValidationError' || err.name === 'CastError') {
         res.status(400).send({ message: err.message });

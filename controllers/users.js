@@ -7,7 +7,7 @@ module.exports.getUsers = (req, res) => {
       if (err.name === 'ValidationError') {
         res.status(400).res.send({ message: err.message });
       } else {
-        res.status(400).res.send({ message: err.message });
+        res.status(404).res.send({ message: err.message });
       }
     });
 };
@@ -19,7 +19,7 @@ module.exports.getUser = (req, res) => {
       if (err.name === 'ValidationError') {
         res.status(400).res.send({ message: err.message });
       } else {
-        res.status(400).res.send({ message: err.message });
+        res.status(404).res.send({ message: err.message });
       }
     });
 };
@@ -33,7 +33,7 @@ module.exports.createUser = (req, res) => {
       if (err.name === 'ValidationError') {
         res.status(400).res.send({ message: err.message });
       } else {
-        res.status(400).res.send({ message: err.message });
+        res.status(404).res.send({ message: err.message });
       }
     });
 };
@@ -47,7 +47,7 @@ module.exports.editUserInfo = (req, res) => {
       if (err.name === 'ValidationError') {
         res.status(400).res.send({ message: err.message });
       } else {
-        res.status(400).res.send({ message: err.message });
+        res.status(404).res.send({ message: err.message });
       }
     });
 };
@@ -61,7 +61,7 @@ module.exports.editUserAvatar = (req, res) => {
       if (err.name === 'ValidationError') {
         res.status(400).res.send({ message: err.message });
       } else {
-        res.status(400).res.send({ message: err.message });
+        res.status(404).res.send({ message: err.message });
       }
     });
 };

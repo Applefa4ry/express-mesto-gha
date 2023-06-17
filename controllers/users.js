@@ -3,13 +3,25 @@ const User = require('../models/user');
 module.exports.getUsers = (req, res) => {
   User.find({})
     .then((users) => res.send({ data: users }))
-    .catch(() => res.status(500).send({ message: 'Произошла ошибка' }));
+    .catch((err) => {
+      if (err.name === 'ValidationError') {
+        res.status(400).res.send({ message: err.message });
+        return;
+      }
+      res.status(400).res.send({ message: err.message });
+    });
 };
 
 module.exports.getUser = (req, res) => {
   User.findById(req.params.id)
     .then((user) => res.send({ data: user }))
-    .catch((err) => res.send({ message: err.name }));
+    .catch((err) => {
+      if (err.name === 'ValidationError') {
+        res.status(400).res.send({ message: err.message });
+        return;
+      }
+      res.status(400).res.send({ message: err.message });
+    });
 };
 
 module.exports.createUser = (req, res) => {
@@ -17,7 +29,13 @@ module.exports.createUser = (req, res) => {
 
   User.create({ name, about, avatar })
     .then((user) => res.send({ data: user }))
-    .catch((err) => res.send({ message: err.name }));
+    .catch((err) => {
+      if (err.name === 'ValidationError') {
+        res.status(400).res.send({ message: err.message });
+        return;
+      }
+      res.status(400).res.send({ message: err.message });
+    });
 };
 
 module.exports.editUserInfo = (req, res) => {
@@ -25,7 +43,13 @@ module.exports.editUserInfo = (req, res) => {
 
   User.findByIdAndUpdate(req.user._id, { name, about })
     .then((user) => res.send({ data: user }))
-    .catch((err) => res.send({ message: err.name }));
+    .catch((err) => {
+      if (err.name === 'ValidationError') {
+        res.status(400).res.send({ message: err.message });
+        return;
+      }
+      res.status(400).res.send({ message: err.message });
+    });
 };
 
 module.exports.editUserAvatar = (req, res) => {
@@ -33,5 +57,11 @@ module.exports.editUserAvatar = (req, res) => {
 
   User.findByIdAndUpdate(req.user._id, { avatar })
     .then((user) => res.send({ data: user }))
-    .catch((err) => res.send({ message: err.name }));
+    .catch((err) => {
+      if (err.name === 'ValidationError') {
+        res.status(400).res.send({ message: err.message });
+        return;
+      }
+      res.status(400).res.send({ message: err.message });
+    });
 };

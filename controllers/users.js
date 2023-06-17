@@ -13,12 +13,13 @@ module.exports.getUsers = (req, res) => {
 };
 
 module.exports.getUser = (req, res) => {
-  User.findById(req.params.userId, {
-    new: true,
-    runValidators: true, // данные будут валидированы перед изменением
-    upsert: false,
-  })
-    .then((user) => res.send({ data: user }))
+  User.findById(req.params.userId)
+    .then((user) => {
+      if (!user) {
+        return res.status(404).send({ message: 'Пользователь не найден' });
+      }
+      res.send({ data: user });
+    })
     .catch((err) => {
       if (err.name === 'ValidationError' || err.name === 'CastError') {
         res.status(400).send({ message: err.message });

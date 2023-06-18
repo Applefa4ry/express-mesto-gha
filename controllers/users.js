@@ -1,10 +1,12 @@
 const User = require('../models/user');
 
 const validator = (err, res) => {
-  if (err.name === 'ValidationError' || err.name === 'CastError' || err.message === 'notValidId') {
+  if (err.name === 'ValidationError' || err.name === 'CastError') {
     res.status(400).send({ message: err.message });
+  } else if (err.message === 'notValidId') {
+    res.status(404).send({ message: err.message });
   } else {
-    res.status(404).send({ message: err.name });
+    res.status(500).send({ message: err.name });
   }
 };
 

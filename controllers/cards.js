@@ -33,12 +33,9 @@ module.exports.createCard = (req, res) => {
 
 module.exports.deleteCard = (req, res) => {
   Card.findByIdAndRemove(req.params.cardId, updateCfg)
+    .orFail(new Error('notValidId'))
     .then((card) => {
-      if (!card) {
-        res.status(404).send({ message: 'Такой карточки не существует' });
-      } else {
-        res.send({ data: card });
-      }
+      res.send({ data: card });
     })
     .catch((err) => {
       validator(err, res);
@@ -51,12 +48,9 @@ module.exports.likeCard = (req, res) => {
     { $addToSet: { likes: req.user._id } }, // добавить _id в массив, если его там нет
     updateCfg,
   )
+    .orFail(new Error('notValidId'))
     .then((card) => {
-      if (!card) {
-        res.status(404).send({ message: 'Такой карточки не существует' });
-      } else {
-        res.send({ data: card });
-      }
+      res.send({ data: card });
     })
     .catch((err) => {
       validator(err, res);
@@ -69,12 +63,9 @@ module.exports.dislikeCard = (req, res) => {
     { $pull: { likes: req.user._id } }, // убрать _id из массива
     updateCfg,
   )
+    .orFail(new Error('notValidId'))
     .then((card) => {
-      if (!card) {
-        res.status(404).send({ message: 'Такой карточки не существует' });
-      } else {
-        res.send({ data: card });
-      }
+      res.send({ data: card });
     })
     .catch((err) => {
       validator(err, res);

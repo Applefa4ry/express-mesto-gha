@@ -24,12 +24,9 @@ module.exports.getUsers = (req, res) => {
 
 module.exports.getUser = (req, res) => {
   User.findById(req.params.userId)
-    .then((user) => {
-      if (!user) {
-        res.status(404).send({ message: 'Пользователь не найден' });
-      } else {
-        res.send({ data: user });
-      }
+    .orFail(new Error('notValidId'))
+    .then((card) => {
+      res.send({ data: card });
     })
     .catch((err) => {
       validator(err, res);

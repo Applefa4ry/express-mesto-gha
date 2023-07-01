@@ -49,12 +49,17 @@ module.exports.createUser = (req, res) => {
       User.create({
         name, about, avatar, email, password: hash,
       })
-        .then((user) => res.send({
-          email: user.email,
-          avatar: user.avatar,
-          name: user.name,
-          about: user.about,
-        }));
+        .then((user) => {
+          if (!user) {
+            throw new Error('Возникла проблема');
+          }
+          res.send({
+            email: user.email,
+            avatar: user.avatar,
+            name: user.name,
+            about: user.about,
+          });
+        });
     })
     .catch((err) => {
       validator(err, res);

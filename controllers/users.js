@@ -1,6 +1,4 @@
-// eslint-disable-next-line import/no-unresolved
 const bcrypt = require('bcryptjs');
-// eslint-disable-next-line import/no-extraneous-dependencies
 const jwt = require('jsonwebtoken');
 const User = require('../models/user');
 

@@ -50,7 +50,13 @@ module.exports.createUser = (req, res) => {
         name, about, avatar, email, password: hash,
       });
     })
-    .then((user) => res.send({ data: user }))
+    .then((user) => res.send({
+      _id: user.id,
+      email: user.email,
+      avatar: user.email,
+      name: user.name,
+      about: user.about,
+    }))
     .catch((err) => {
       validator(err, res);
     });

@@ -8,12 +8,8 @@ router.get('/', getUsers);
 router.get('/me', getUser);
 router.get('/:userId', celebrate({
   params: Joi.object().keys({
-    noteId: Joi.string().alphanum().length(12),
+    userId: Joi.string().alphanum().length(24),
   }),
-  headers: Joi.object()
-    .keys({
-    })
-    .unknown(true),
 }), getUser);
 router.patch('/me', celebrate({
   body: Joi.object().keys({

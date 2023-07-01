@@ -104,6 +104,8 @@ module.exports.login = (req, res) => {
         .end();
     })
     .catch((err) => {
-      validator(err, res);
+      res
+        .status(401)
+        .send({ message: err.message });
     });
 };

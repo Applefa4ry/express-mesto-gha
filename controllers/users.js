@@ -44,9 +44,9 @@ module.exports.createUser = (req, res) => {
     name, about, avatar, email, password,
   } = req.body;
   User.findOne(email)
-    .then((err, user) => {
+    .then((user) => {
       if (user) {
-        res.status(409).send({ message: err.message });
+        res.status(409).send({ message: 'Тяжело' });
       }
       bcrypt.hash(password, 10)
         .then((hash) => {

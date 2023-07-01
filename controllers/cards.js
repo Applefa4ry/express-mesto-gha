@@ -34,16 +34,12 @@ module.exports.createCard = (req, res) => {
 };
 
 module.exports.deleteCard = (req, res) => {
-  const userId = req.user._id;
-  const cardId = req.params.cardId;
-
-  Card.findOne({ _id: cardId, owner: userId })
+  Card.findOne({ _id: req.params.cardId, owner: req.user._id })
     .then((card) => {
       if (!card) {
         throw new Error('notValidId');
       }
-
-      return Card.findByIdAndRemove(cardId, updateCfg);
+      return Card.findByIdAndRemove(req.params.cardId, updateCfg);
     })
     .then((card) => {
       res.send({ data: card });
@@ -52,7 +48,6 @@ module.exports.deleteCard = (req, res) => {
       validator(err, res);
     });
 };
-
 
 module.exports.likeCard = (req, res) => {
   Card.findByIdAndUpdate(

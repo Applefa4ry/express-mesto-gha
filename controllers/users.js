@@ -50,9 +50,8 @@ module.exports.createUser = (req, res) => {
         name, about, avatar, email, password: hash,
       })
         .then((user) => res.send({
-          _id: user.id,
           email: user.email,
-          avatar: user.email,
+          avatar: user.avatar,
           name: user.name,
           about: user.about,
         }));

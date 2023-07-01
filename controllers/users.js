@@ -116,7 +116,7 @@ module.exports.login = (req, res, next) => {
       res.send({ token });
     })
     .catch((err) => {
-      if (err.name === 'AuthError') {
+      if (err.name === 'AuthError' || err.message === 'Неправильные почта или пароль') {
         next(new AuthError('Неправильные почта или пароль'));
       } else {
         next(err);

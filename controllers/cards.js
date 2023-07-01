@@ -79,7 +79,7 @@ module.exports.dislikeCard = (req, res, next) => {
       res.send({ data: card });
     })
     .catch((err) => {
-      if (err.name === 'Error') {
+      if (err.name === 'Error' && err.message !== 'Неверный ID карточки') {
         next(new InvalidRequest('Ошибка при дизлайке карточки'));
       } else {
         next(err);

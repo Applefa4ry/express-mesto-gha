@@ -59,6 +59,9 @@ module.exports.createUser = (req, res) => {
             name: user.name,
             about: user.about,
           });
+        })
+        .catch((err) => {
+          validator(err, res);
         });
     })
     .catch((err) => {

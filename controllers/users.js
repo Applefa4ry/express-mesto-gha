@@ -53,7 +53,6 @@ module.exports.createUser = (req, res, next) => {
       User.create({
         name, about, avatar, email, password: hash,
       })
-        // eslint-disable-next-line consistent-return
         .then((user) => {
           if (!user) {
             throw new ConflictError('Такой пользователь уже существует');

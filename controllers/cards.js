@@ -1,4 +1,8 @@
 const Card = require('../models/card');
+const NotFoundError = require('../errors/not-found-error');
+const InvalidRequest = require('../errors/invalid-request');
+const AuthError = require('../errors/auth-error');
+const ConflictError = require('../errors/conflict-error');
 
 // const validator = (err, res) => {
 //   if (err.name === 'ValidationError' || err.name === 'CastError') {

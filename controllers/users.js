@@ -49,9 +49,10 @@ module.exports.createUser = (req, res) => {
       User.create({
         name, about, avatar, email, password: hash,
       })
+        // eslint-disable-next-line consistent-return
         .then((user) => {
           if (!user) {
-            throw new Error('Возникла проблема');
+            return Promise.reject(new Error('Возникла проблема'));
           }
           res.send({
             email: user.email,

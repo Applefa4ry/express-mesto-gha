@@ -6,18 +6,6 @@ const InvalidRequest = require('../errors/invalid-request');
 const AuthError = require('../errors/auth-error');
 const ConflictError = require('../errors/conflict-error');
 
-// const validator = (err, res) => {
-//   if (err.name === 'ValidationError' || err.name === 'CastError') {
-//     res.status(400).send({ message: err.message });
-//   } else if (err.message === 'Неправильные почта или пароль') {
-//     res.status(401).send({ message: err.message });
-//   } else if (err.message === 'notValidId') {
-//     res.status(404).send({ message: err.message });
-//   } else {
-//     res.status(500).send({ message: err.name });
-//   }
-// };
-
 const updateCfg = {
   new: true, // обработчик then получит на вход обновлённую запись
   runValidators: true, // данные будут валидированы перед изменением
@@ -28,18 +16,28 @@ module.exports.getUsers = (req, res, next) => {
   User.find({})
     .then((users) => res.send({ data: users }))
     .catch((err) => {
-      next(err);
+      if (err.name === 'ValidationError' || err.name === 'CastError') {
+        next(new InvalidRequest(''));
+      } else {
+        next(err);
+      }
     });
 };
 
 module.exports.getUser = (req, res, next) => {
   User.findById(!req.params.userId ? req.user._id : req.params.userId)
-    .orFail(new Error('notValidId'))
+    .orFail(new NotFoundError('Такого пользователя не существует'))
     .then((card) => {
       res.send({ data: card });
     })
     .catch((err) => {
-      next(err);
+      if (err.kind === 'ObjectId') {
+        next(new InvalidRequest('Некорректный id пользователя'));
+      } else if (err.name === 'DocumentNotFoundError') {
+        next(new NotFoundError('Пользователь не найден'));
+      } else {
+        next(err);
+      }
     });
 };
 
@@ -65,7 +63,11 @@ module.exports.createUser = (req, res, next) => {
           });
         })
         .catch((err) => {
-          next(err);
+          if (err.name === 'MongoError' && err.code === 11000) {
+            next(new ConflictError('Такой пользователь уже существует'));
+          } else {
+            next(err);
+          }
         });
     })
     .catch((err) => {
@@ -79,7 +81,11 @@ module.exports.editUserInfo = (req, res, next) => {
   User.findByIdAndUpdate(req.user._id, { name, about }, updateCfg)
     .then((user) => res.send({ data: user }))
     .catch((err) => {
-      next(err);
+      if (err.name === 'ValidationError' || err.name === 'CastError') {
+        next(new InvalidRequest());
+      } else {
+        next(err);
+      }
     });
 };
 
@@ -89,7 +95,11 @@ module.exports.editUserAvatar = (req, res, next) => {
   User.findByIdAndUpdate(req.user._id, { avatar }, updateCfg)
     .then((user) => res.send({ data: user }))
     .catch((err) => {
-      next(err);
+      if (err.name === 'ValidationError' || err.name === 'CastError') {
+        next(new InvalidRequest());
+      } else {
+        next(err);
+      }
     });
 };
 
@@ -106,6 +116,10 @@ module.exports.login = (req, res, next) => {
       res.send({ token });
     })
     .catch((err) => {
-      next(err);
+      if (err.name === 'AuthError') {
+        next(new AuthError('Неправильные почта или пароль'));
+      } else {
+        next(err);
+      }
     });
 };

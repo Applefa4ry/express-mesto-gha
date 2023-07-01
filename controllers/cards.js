@@ -1,18 +1,6 @@
 const Card = require('../models/card');
 const NotFoundError = require('../errors/not-found-error');
 const InvalidRequest = require('../errors/invalid-request');
-const AuthError = require('../errors/auth-error');
-const ConflictError = require('../errors/conflict-error');
-
-// const validator = (err, res) => {
-//   if (err.name === 'ValidationError' || err.name === 'CastError') {
-//     res.status(400).send({ message: err.message });
-//   } else if (err.message === 'notValidId') {
-//     res.status(404).send({ message: err.message });
-//   } else {
-//     res.status(500).send({ message: err.name });
-//   }
-// };
 
 const updateCfg = {
   new: true, // обработчик then получит на вход обновлённую запись
@@ -33,7 +21,11 @@ module.exports.createCard = (req, res, next) => {
   Card.create({ name, link, owner: req.user._id })
     .then((card) => res.send({ data: card }))
     .catch((err) => {
-      next(err);
+      if (err.name === 'Error') {
+        throw new InvalidRequest('Ошибка при создании карточки');
+      } else {
+        next(err);
+      }
     });
 };
 
@@ -41,7 +33,7 @@ module.exports.deleteCard = (req, res, next) => {
   Card.findOne({ _id: req.params.cardId, owner: req.user._id })
     .then((card) => {
       if (!card) {
-        throw new Error('notValidId');
+        throw new NotFoundError('Неверный ID карточки');
       }
       return Card.findByIdAndRemove(req.params.cardId, updateCfg);
     })
@@ -49,7 +41,11 @@ module.exports.deleteCard = (req, res, next) => {
       res.send({ data: card });
     })
     .catch((err) => {
-      next(err);
+      if (err.name === 'Error') {
+        throw new InvalidRequest('Ошибка при удалении карточки');
+      } else {
+        next(err);
+      }
     });
 };
 
@@ -59,12 +55,16 @@ module.exports.likeCard = (req, res, next) => {
     { $addToSet: { likes: req.user._id } }, // добавить _id в массив, если его там нет
     updateCfg,
   )
-    .orFail(new Error('notValidId'))
+    .orFail(new NotFoundError('Неверный ID карточки'))
     .then((card) => {
       res.send({ data: card });
     })
     .catch((err) => {
-      next(err);
+      if (err.name === 'Error') {
+        throw new InvalidRequest('Ошибка при лайке карточки');
+      } else {
+        next(err);
+      }
     });
 };
 
@@ -74,11 +74,15 @@ module.exports.dislikeCard = (req, res, next) => {
     { $pull: { likes: req.user._id } }, // убрать _id из массива
     updateCfg,
   )
-    .orFail(new Error('notValidId'))
+    .orFail(new NotFoundError('Неверный ID карточки'))
     .then((card) => {
       res.send({ data: card });
     })
     .catch((err) => {
-      next(err);
+      if (err.name === 'Error') {
+        throw new InvalidRequest('Ошибка при дизлайке карточки');
+      } else {
+        next(err);
+      }
     });
 };

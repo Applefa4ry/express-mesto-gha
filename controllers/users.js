@@ -43,31 +43,29 @@ module.exports.createUser = (req, res) => {
   const {
     name, about, avatar, email, password,
   } = req.body;
-  User.findOne(email)
-    .then((user) => {
-      if (user) {
-        res.status(409).send({ message: 'Тяжело' });
-      }
-      bcrypt.hash(password, 10)
-        .then((hash) => {
-          User.create({
-            name, about, avatar, email, password: hash,
-          })
-            .then((newUser) => {
-              res.send({
-                email: newUser.email,
-                avatar: newUser.avatar,
-                name: newUser.name,
-                about: newUser.about,
-              });
-            })
-            .catch((error) => {
-              validator(error, res);
-            });
+
+  bcrypt.hash(password, 10)
+    .then((hash) => {
+      User.create({
+        name, about, avatar, email, password: hash,
+      })
+        .then((user) => {
+          if (!user) {
+            throw new Error('Возникла проблема');
+          }
+          res.send({
+            email: user.email,
+            avatar: user.avatar,
+            name: user.name,
+            about: user.about,
+          });
         })
-        .catch((error) => {
-          validator(error, res);
+        .catch((err) => {
+          validator(err, res);
         });
+    })
+    .catch((err) => {
+      validator(err, res);
     });
 };
 

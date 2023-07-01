@@ -1,9 +1,10 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const User = require('../models/user');
-// const NotFoundError = require('../errors/not-found-error');
-// const InvalidRequest = require('../errors/invalid-request');
-// const AuthError = require('../errors/auth-error');
+const NotFoundError = require('../errors/not-found-error');
+const InvalidRequest = require('../errors/invalid-request');
+const AuthError = require('../errors/auth-error');
+const ConflictError = require('../errors/conflict-error');
 
 // const validator = (err, res) => {
 //   if (err.name === 'ValidationError' || err.name === 'CastError') {
@@ -55,7 +56,7 @@ module.exports.createUser = (req, res, next) => {
         // eslint-disable-next-line consistent-return
         .then((user) => {
           if (!user) {
-            return Promise.reject(new Error('Возникла проблема'));
+            throw new ConflictError('Такой пользователь уже существует');
           }
           res.send({
             email: user.email,

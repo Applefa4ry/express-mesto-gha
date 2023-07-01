@@ -99,12 +99,12 @@ module.exports.login = (req, res) => {
         .cookie('jwt', token, {
           maxAge: 3600000 * 24 * 7,
           httpOnly: true,
-        })
-        .end();
+        });
+      res.send({ token });
     })
     .catch((err) => {
       res
         .status(401)
-        .send({ message: err });
+        .send({ message: err.message });
     });
 };

@@ -1,7 +1,7 @@
 const Card = require('../models/card');
 const NotFoundError = require('../errors/not-found-error');
 const InvalidRequest = require('../errors/invalid-request');
-const AuthError = require('../errors/auth-error');
+const Forbidden = require('../errors/forbidden-error');
 
 const updateCfg = {
   new: true, // обработчик then получит на вход обновлённую запись
@@ -36,7 +36,7 @@ module.exports.deleteCard = (req, res, next) => {
       if (!card) {
         next(new NotFoundError('Неверный ID карточки'));
       } else if (card.owner.toString() !== req.user._id) {
-        next(new AuthError('Вы не можете удалить чужую карточку'));
+        next(new Forbidden('Вы не можете удалить чужую карточку'));
       }
       return Card.findByIdAndRemove(req.params.cardId, updateCfg);
     })

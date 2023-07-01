@@ -22,7 +22,7 @@ module.exports.createCard = (req, res, next) => {
     .then((card) => res.send({ data: card }))
     .catch((err) => {
       if (err.name === 'Error') {
-        throw new InvalidRequest('Ошибка при создании карточки');
+        next(new InvalidRequest('Ошибка при создании карточки'));
       } else {
         next(err);
       }
@@ -33,7 +33,7 @@ module.exports.deleteCard = (req, res, next) => {
   Card.findOne({ _id: req.params.cardId, owner: req.user._id })
     .then((card) => {
       if (!card) {
-        throw new NotFoundError('Неверный ID карточки');
+        next(new NotFoundError('Неверный ID карточки'));
       }
       return Card.findByIdAndRemove(req.params.cardId, updateCfg);
     })
@@ -42,7 +42,7 @@ module.exports.deleteCard = (req, res, next) => {
     })
     .catch((err) => {
       if (err.name === 'Error') {
-        throw new InvalidRequest('Ошибка при удалении карточки');
+        next(new InvalidRequest('Ошибка при удалении карточки'));
       } else {
         next(err);
       }
@@ -80,7 +80,7 @@ module.exports.dislikeCard = (req, res, next) => {
     })
     .catch((err) => {
       if (err.name === 'Error') {
-        throw new InvalidRequest('Ошибка при дизлайке карточки');
+        next(new InvalidRequest('Ошибка при дизлайке карточки'));
       } else {
         next(err);
       }

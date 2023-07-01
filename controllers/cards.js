@@ -1,3 +1,5 @@
+/* eslint-disable consistent-return */
+/* eslint-disable no-shadow */
 const Card = require('../models/card');
 
 const validator = (err, res) => {
@@ -34,10 +36,17 @@ module.exports.createCard = (req, res) => {
 };
 
 module.exports.deleteCard = (req, res) => {
-  Card.findByIdAndRemove(req.params.cardId, updateCfg)
-    .orFail(new Error('notValidId'))
+  Card.findById(req.params.cardId)
     .then((card) => {
-      res.send({ data: card });
+      if (!card) {
+        return Promise.reject(new Error('Ошибка'));
+      } if (card.owner === req.user._id) {
+        Card.findByIdAndRemove(req.params.cardId, updateCfg)
+          .orFail(new Error('notValidId'))
+          .then((card) => {
+            res.send({ data: card });
+          });
+      }
     })
     .catch((err) => {
       validator(err, res);

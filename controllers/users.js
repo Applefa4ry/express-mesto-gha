@@ -29,7 +29,7 @@ module.exports.getUsers = (req, res) => {
 };
 
 module.exports.getUser = (req, res) => {
-  User.findById(req.user._id)
+  User.findById(!req.params.userId ? req.user._id : req.params.userId)
     .orFail(new Error('notValidId'))
     .then((card) => {
       res.send({ data: card });

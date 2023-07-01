@@ -61,7 +61,7 @@ module.exports.likeCard = (req, res, next) => {
     })
     .catch((err) => {
       if (err.name === 'Error') {
-        throw new InvalidRequest('Ошибка при лайке карточки');
+        next(new InvalidRequest('Ошибка при лайке карточки'));
       } else {
         next(err);
       }

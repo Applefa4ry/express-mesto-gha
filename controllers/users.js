@@ -46,7 +46,7 @@ module.exports.getCurrentUser = (req, res, next) => {
 };
 
 module.exports.getUser = (req, res, next) => {
-  getUserData(req.params.id, res, next);
+  getUserData(req.params.userId, res, next);
 };
 
 module.exports.createUser = (req, res, next) => {

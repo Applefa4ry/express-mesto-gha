@@ -16,7 +16,7 @@ module.exports.getUsers = (req, res, next) => {
   User.find({})
     .then((users) => res.send({ data: users }))
     .catch((err) => {
-      if (err.name === 'ValidationError' || err.name === 'CastError') {
+      if (err.name === 'ValidationError') {
         next(new InvalidRequest(''));
       } else {
         next(err);
@@ -24,8 +24,8 @@ module.exports.getUsers = (req, res, next) => {
     });
 };
 
-module.exports.getUser = (req, res, next) => {
-  User.findById(!req.params.userId ? req.user._id : req.params.userId)
+const getUserData = (id, res, next) => {
+  User.findById(id)
     .orFail(new NotFoundError('Такого пользователя не существует'))
     .then((card) => {
       res.send({ data: card });
@@ -41,6 +41,14 @@ module.exports.getUser = (req, res, next) => {
     });
 };
 
+module.exports.getCurrentUser = (req, res, next) => {
+  getUserData(req.user._id, res, next);
+};
+
+module.exports.getUser = (req, res, next) => {
+  getUserData(req.params.id, res, next);
+};
+
 module.exports.createUser = (req, res, next) => {
   const {
     name, about, avatar, email, password,
@@ -52,9 +60,6 @@ module.exports.createUser = (req, res, next) => {
         name, about, avatar, email, password: hash,
       })
         .then((user) => {
-          if (!user) {
-            throw new ConflictError('Такой пользователь уже существует');
-          }
           res.send({
             email: user.email,
             avatar: user.avatar,
@@ -65,6 +70,8 @@ module.exports.createUser = (req, res, next) => {
         .catch((err) => {
           if (err.name === 'MongoError' && err.code === 11000) {
             next(new ConflictError('Такой пользователь уже существует'));
+          } else if (err.name === 'ValidationError') {
+            next(new InvalidRequest('Некорректные данные при создании пользователя'));
           } else {
             next(err);
           }

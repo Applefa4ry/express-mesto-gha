@@ -12,9 +12,7 @@ const updateCfg = {
 module.exports.getCards = (req, res, next) => {
   Card.find({})
     .then((cards) => res.send({ data: cards }))
-    .catch((err) => {
-      next(err);
-    });
+    .catch(next);
 };
 
 module.exports.createCard = (req, res, next) => {
@@ -22,7 +20,7 @@ module.exports.createCard = (req, res, next) => {
   Card.create({ name, link, owner: req.user._id })
     .then((card) => res.send({ data: card }))
     .catch((err) => {
-      if (err.name === 'Error') {
+      if (err.name === 'ValidationError') {
         next(new InvalidRequest('Ошибка при создании карточки'));
       } else {
         next(err);
@@ -44,7 +42,7 @@ module.exports.deleteCard = (req, res, next) => {
       res.send({ data: card });
     })
     .catch((err) => {
-      if (err.name === 'Error') {
+      if (err.name === 'CastError') {
         next(new InvalidRequest('Ошибка при удалении карточки'));
       } else {
         next(err);
@@ -63,7 +61,7 @@ module.exports.likeCard = (req, res, next) => {
       res.send({ data: card });
     })
     .catch((err) => {
-      if (err.name === 'Error' && err.message !== 'Неверный ID карточки') {
+      if (err.name === 'CastError') {
         next(new InvalidRequest('Ошибка при лайке карточки'));
       } else {
         next(err);
@@ -82,7 +80,7 @@ module.exports.dislikeCard = (req, res, next) => {
       res.send({ data: card });
     })
     .catch((err) => {
-      if (err.name === 'Error' && err.message !== 'Неверный ID карточки') {
+      if (err.name === 'CastError') {
         next(new InvalidRequest('Ошибка при дизлайке карточки'));
       } else {
         next(err);
